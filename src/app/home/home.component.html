@@ -1,0 +1,65 @@
+<section class="pb-4">
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row ">
+        <div class="col-4">
+          <div class="input-group flex-nowrap">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="addon-wrapping">Search:</span>
+            </div>
+            <input type="text" class="form-control" aria-describedby="addon-wrapping"
+              (input)="onSearchArticles($event.target.value)">
+          </div>
+        </div>
+        <div class="col-8">
+          <div class="input-group flex-nowrap">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="addon-wrapping">Sort:</span>
+            </div>
+            <select class="form-select" name="sortBy" [(ngModel)]="requestSort.sortBy">
+              <option selected value="">No sort</option>
+              <option *ngFor="let item of key_object" [value]="item">{{item}}</option>
+            </select>
+            <select class="form-select" name="order" [(ngModel)]="requestSort.order">
+              <option selected value="asc">Asc</option>
+              <option value="desc">Desc </option>
+            </select>
+            <input class="btn btn-primary" type="submit" value="Sort" (click)="onFilterArticles()">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="spinner-border" role="status" *ngIf="isLoadding">
+      </div>
+      <ul class="list-unstyled" *ngIf="!isLoadding">
+        <li class="media" *ngFor="let item of articles">
+          <img [src]="item.image" class="mr-3" [alt]="item.image">
+          <div class="media-body">
+            <h5 class="mt-0 mb-1"><b>Title: </b> {{item.title}}</h5>
+            <p><b> ID: </b> {{item.id}}</p>
+            <p><b> Create date: </b> {{item.createdAt | date: 'dd/MM/yyyy'}}</p>
+            <b>Content: </b> {{item.content}}
+          </div>
+          <button class="btn btn-primary" type="submit" (click)="openDetailArticle(item.id)">Read detail</button>
+        </li>
+      </ul>
+      <nav aria-label="..." *ngIf="textSearch == ''">
+        <ul class="pagination">
+          <li class="page-item" *ngIf="paginate.currentPage != 1 &&  paginate.totalPage > 1">
+            <a class="page-link" tabindex="-1" (click)="onFilterPaginate(1)">Đầu trang</a>
+          </li>
+          <ng-container *ngFor="let item of paginate.totalPageArray">
+            <li class="page-item"><a class="page-link" (click)="onFilterPaginate(item)">{{item}}</a></li>
+          </ng-container>
+          <li class="page-item" *ngIf="paginate.currentPage != paginate.totalPage &&  paginate.totalPage > 1  ">
+            <a class="page-link" (click)="onFilterPaginate(paginate.totalPage)">Cuối trang</a>
+          </li>
+        </ul>
+        <p>page {{paginate.currentPage}} of {{paginate.totalPage}} pages </p>
+      </nav>
+    </div>
+  </div>
+</section>
